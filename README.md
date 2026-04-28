@@ -79,4 +79,4 @@ After I approve, create the technical plan and implement it.
 
 ## Design Goal
 
-This is intentionally small. It is not a full company simulator. It is a practical coordination workflow that helps agents make better product and engineering decisions without endless role-play.
+It is not a full company simulator. It is a practical coordination workflow that helps agents make better product and engineering decisions without endless role-play.

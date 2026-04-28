@@ -1,0 +1,8 @@
+interface:
+  display_name: "Virtual Company Workflow"
+  short_description: "Run projects with a lightweight virtual team"
+  brand_color: "#2563EB"
+  default_prompt: "Use $virtual-company-workflow to run this project like a small product team."
+
+policy:
+  allow_implicit_invocation: true

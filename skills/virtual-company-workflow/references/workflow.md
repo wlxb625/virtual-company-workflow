@@ -1,75 +1,199 @@
-# Workflow Checklists
+# 工作流检查清单
 
-## Compact Workflow
+这个文件用于在执行 `virtual-company-workflow` 时提供阶段清单。实际使用时按任务大小裁剪，不要机械套流程。
 
-Use for small tasks.
+## 快速判断
 
-1. Restate the goal.
-2. User representative identifies the practical user value.
-3. Product manager defines the smallest useful scope.
-4. Architect or developer proposes the simplest implementation path.
-5. Project lead asks for approval if there is meaningful ambiguity.
-6. Implement.
-7. QA/reviewer verifies and reports.
+开始前先判断当前请求属于哪一类：
 
-## Full Workflow
+| 类型 | 推荐流程 |
+|---|---|
+| 想法很模糊 | 需求接收 → 产品对齐 → 让用户确认 |
+| 已有明确需求 | 产品对齐 → 技术方案 → 实现 |
+| 已有代码要修改 | 阅读项目 → 技术方案 → 实现 → 验证 |
+| 只做 Review | Reviewer → QA → 修改建议 |
+| 小功能 / 小脚本 | 轻量流程即可 |
+| 较大项目 | 完整流程 |
 
-Use for larger or ambiguous projects.
+## 轻量流程
 
-### 1. Intake
+适合小任务、单文件修改、小脚本、小功能。
 
-- What is the outcome?
-- Who is the user?
-- Is this discovery, planning, implementation, or review?
-- What existing project context must be inspected?
+1. 复述目标。
+2. 用户代表判断实际使用价值。
+3. 产品经理定义最小可用范围。
+4. 架构师或开发者给出最简单实现路径。
+5. 有明显歧义时，项目负责人向真实用户确认。
+6. 开始实现。
+7. QA / Reviewer 验证并汇报。
 
-### 2. Product Alignment
-
-- User representative: user needs, objections, and first-use failure cases.
-- Product manager: MVP, non-goals, priorities, acceptance criteria.
-- Project lead: summarize conflicts and ask for decisions.
-
-### 3. Experience and Architecture
-
-- Designer: user flow, states, UX risks.
-- Architect: modules, data flow, dependencies, risks, task split.
-- Project lead: recommend an approach and ask for approval when needed.
-
-### 4. Implementation
-
-Each implementation task should include:
-
-- Role
-- Ownership
-- Inputs
-- Constraints
-- Expected output
-- Verification command
-
-Avoid assigning two agents to the same file unless the project lead explicitly coordinates the sequence.
-
-### 5. Validation
-
-- QA checks acceptance criteria and edge cases.
-- Reviewer checks code quality and risks.
-- Project lead runs final verification where possible.
-- Final report includes what changed, how it was verified, and remaining risks.
-
-## Decision Handling
-
-When roles disagree, use this format:
+轻量流程的输出可以很短，例如：
 
 ```text
-Disagreement:
-- Product wants ...
-- Architecture warns ...
-- User representative cares about ...
+目标：...
+最小范围：...
+实现方式：...
+需要确认：...
+```
 
-Recommendation:
+## 完整流程
+
+适合较大、模糊、涉及多模块或需要多 Agent 协作的项目。
+
+### 1. 需求接收
+
+检查：
+
+- 用户想要的最终结果是什么？
+- 目标用户是谁？
+- 这是需求探索、规划、实现、Review，还是综合任务？
+- 是否需要先阅读现有项目结构？
+- 是否有约束条件，例如技术栈、时间、部署方式、中文用户体验、模型 API 等？
+
+推荐输出：
+
+```text
+我理解的目标：...
+当前任务类型：...
+已知约束：...
+建议先做：...
+```
+
+### 2. 产品对齐
+
+角色分工：
+
+- 用户代表：用户需求、使用阻力、首次失败点。
+- 产品经理：MVP、非目标、优先级、验收标准。
+- 项目负责人：总结分歧并请求用户确认。
+
+检查问题：
+
+- MVP 是否足够小？
+- 哪些功能这次明确不做？
+- 用户怎么判断“完成了”？
+- 有没有为了炫技而加功能？
+
+推荐输出：
+
+```text
+MVP：...
+本次范围：...
+暂不做：...
+验收标准：...
+需要你确认：...
+```
+
+### 3. 体验和架构
+
+角色分工：
+
+- 设计师：用户流程、关键状态、体验风险。
+- 架构师：模块、数据流、依赖、风险、任务拆解。
+- 项目负责人：推荐方案并确认下一步。
+
+检查问题：
+
+- 用户流程是否走得通？
+- 中文文案是否自然？
+- 模块边界是否清楚？
+- 是否会影响已有功能？
+- 是否需要配置环境变量、API Key、Base URL 或模型名称？
+- 错误处理和空状态是否考虑？
+
+推荐输出：
+
+```text
+用户流程：...
+技术方案：...
+目录/模块调整：...
+风险：...
+下一步开发任务：...
+```
+
+### 4. 实现
+
+每个实现任务都应该包含：
+
+- Role：执行角色
+- Ownership：负责的文件 / 文件夹 / 模块
+- Inputs：需求、接口、设计说明、已有文件
+- Constraints：不能修改的区域、不能破坏的行为
+- Expected output：预期改动
+- Verification command：验证命令或手动验证方式
+
+多 Agent 协作时，避免两个 Agent 同时改同一个文件。确实需要改同一文件时，项目负责人要明确顺序。
+
+开发阶段检查：
+
+- 是否遵守现有项目风格？
+- 是否保留原有调用方式？
+- 是否处理中文路径、中文提示、中文输入？
+- 是否避免硬编码密钥？
+- 是否写清楚环境变量和配置方式？
+
+### 5. 验证
+
+角色分工：
+
+- QA 检查验收标准和边界情况。
+- Reviewer 检查代码质量和风险。
+- 项目负责人尽可能运行最终验证。
+
+最终报告包含：
+
+- 改了什么
+- 如何验证
+- 结果是否通过
+- 还有哪些风险
+- 建议下一步做什么
+
+推荐输出：
+
+```text
+已完成：...
+验证方式：...
+验证结果：...
+剩余风险：...
+下一步建议：...
+```
+
+## 分歧处理
+
+当角色意见不一致时，不要隐藏分歧。用下面格式处理：
+
+```text
+分歧：
+- 产品经理认为：...
+- 架构师提醒：...
+- 用户代表关心：...
+
+我的建议：
 ...
 
-Decision needed:
+需要你决定：
 ...
 ```
 
-Do not hide disagreement. Good virtual companies make trade-offs visible.
+好的协作不是没有分歧，而是把取舍说清楚。
+
+## 中文用户注意事项
+
+面向中国用户时，默认注意：
+
+- 输出以中文为主，必要英文术语可以保留。
+- 安装路径、命令、环境变量要写清楚。
+- Windows 路径要优先考虑，例如 `%USERPROFILE%`、反斜杠路径。
+- 模型 API 接入要说明 Base URL、API Key、模型名称和 OpenAI 兼容格式。
+- 页面文案和错误提示要自然，不要直译英文。
+- 如果涉及部署，说明国内访问、网络、代理或平台限制可能带来的问题。
+
+## 结束条件
+
+满足以下条件时，可以结束本轮工作：
+
+- 用户目标已被复述并确认，或没有明显歧义。
+- MVP / 修改范围清楚。
+- 已完成必要实现或给出明确计划。
+- 已说明验证方式和结果。
+- 已列出剩余风险，不假装没有问题。

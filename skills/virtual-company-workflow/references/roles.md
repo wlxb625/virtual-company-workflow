@@ -1,109 +1,183 @@
-# Role Responsibilities
+# 角色职责说明
 
-## Project Lead
+这个文件用于补充 `SKILL.md` 中的角色定义。实际使用时不要机械地让所有角色都发言，而是根据任务大小选择必要角色。
 
-The project lead is the main agent. It owns coordination, sequencing, conflict resolution, and final reporting.
+## 项目负责人
 
-Responsibilities:
+项目负责人就是主 Agent。它负责协调顺序、控制节奏、整合分歧和最终汇报。
 
-- Choose which roles are needed for the current task.
-- Keep the process lightweight.
-- Convert role opinions into decisions and next actions.
-- Ask the real user for approval when scope, trade-offs, or product direction are unclear.
-- During implementation, protect ownership boundaries and integrate results.
+主要职责：
 
-## User Representative
+- 判断当前任务需要哪些角色参与。
+- 保持流程轻量，不把简单任务复杂化。
+- 把角色意见转成清晰决策和下一步行动。
+- 当范围、取舍或产品方向不明确时，向真实用户确认。
+- 开发阶段保护文件 / 模块边界，避免多 Agent 互相覆盖。
+- 汇报时说明已经完成什么、如何验证、还有什么风险。
 
-Represents the target user, not the project owner.
+常用输出：
 
-Useful questions:
+- 当前状态
+- 关键分歧
+- 推荐方案
+- 需要用户确认的问题
+- 下一步计划
 
-- What is the user's job-to-be-done?
-- What pain or confusion makes them abandon the product?
-- What would make the first version feel useful?
-- What edge case would a real user hit first?
+## 用户代表
 
-Output:
+用户代表关注“真实用户会不会用”，不是替项目所有者自嗨。
 
-- User goal
-- Friction points
-- Must-have expectations
-- Reasons the user might reject the solution
+适合思考的问题：
 
-## Product Manager
+- 目标用户是谁？
+- 用户真正想完成什么任务？
+- 用户第一次使用时最可能卡在哪里？
+- 什么情况会让用户直接放弃？
+- 最小版本做到什么程度，用户才会觉得有用？
 
-Turns intent into scope.
+输出内容：
 
-Output:
+- 用户目标
+- 痛点和阻力
+- 必须满足的期待
+- 可能拒绝这个方案的原因
+- 首次使用的失败点
 
-- MVP goal
-- In-scope features
-- Explicit non-goals
-- Priority order
-- Acceptance criteria
-- Open product questions
+## 产品经理
 
-## Designer
+产品经理负责把想法变成可执行范围。
 
-Focuses on flow and experience. This role is useful for apps, websites, workflows, documents, and tools with user-facing behavior.
+输出内容：
 
-Output:
+- MVP 目标
+- 本次要做的功能
+- 明确不做的功能
+- 优先级排序
+- 验收标准
+- 还需要用户确认的问题
 
-- Primary user flow
-- Key screens or states
-- Empty, loading, error, and success states
-- UX risks
-- Copy or naming concerns
+使用原则：
 
-## Architect
+- 先保证最小可用，不要一开始就堆功能。
+- 任何新增功能都要说明为什么必须做。
+- 不确定的地方要列成问题，而不是直接替用户决定。
 
-Turns the product shape into a technical plan.
+## 设计师
 
-Output:
+设计师关注流程和体验。它不只用于网页，也适合工具、文档、命令行流程和 Agent 工作流。
 
-- Module boundaries
-- Data model or data flow
-- External dependencies
-- Risks and constraints
-- Parallelizable implementation tasks
-- Testing strategy
+输出内容：
 
-## Developer
+- 主要用户流程
+- 关键页面或关键状态
+- 空状态、加载状态、错误状态、成功状态
+- 用户体验风险
+- 文案、命名和提示语建议
 
-Implements assigned work.
+使用原则：
 
-Required task brief:
+- 优先保证用户看得懂、走得通。
+- 不要过度追求视觉包装。
+- 对中文用户，要注意表达自然、按钮文案明确、错误提示能指导下一步。
 
-- Ownership: files, folders, modules, or responsibility
-- Inputs: spec, API, design notes, existing files
-- Constraints: what not to touch
-- Output: changed files, verification run, risks
+## 架构师
 
-When using multiple developers, each developer must be told that other agents may be editing nearby code and that they must not revert others' changes.
+架构师负责把产品范围转成技术方案。
+
+输出内容：
+
+- 模块边界
+- 数据模型或数据流
+- 接口设计
+- 外部依赖
+- 风险和限制
+- 可并行开发任务
+- 测试策略
+
+使用原则：
+
+- 优先选择最简单可靠的方案。
+- 不为了“架构感”引入不必要依赖。
+- 对已有项目，先读项目结构，再提修改计划。
+
+## 开发者
+
+开发者负责实现明确任务。
+
+分配任务时必须说明：
+
+- Ownership：负责哪些文件、文件夹、模块或功能。
+- Inputs：参考哪些需求、接口、设计说明或已有文件。
+- Constraints：哪些区域不能改，哪些行为不能破坏。
+- Output：需要交付哪些改动、运行哪些验证、说明哪些风险。
+
+多 Agent 协作时，必须提醒开发者：
+
+- 你不是唯一修改代码的人。
+- 不要回滚其他 Agent 的改动。
+- 发现冲突先报告给项目负责人，不要擅自重写大段代码。
 
 ## QA
 
-Validates behavior against acceptance criteria.
+QA 负责根据验收标准验证功能。
 
-Output:
+输出内容：
 
-- Test checklist
-- Commands run
-- Passing and failing results
-- Missing coverage
-- Reproduction notes for bugs
+- 测试清单
+- 运行过的命令
+- 通过 / 失败结果
+- 未覆盖的风险
+- Bug 复现步骤
 
-## Reviewer
+检查重点：
 
-Reviews quality after implementation.
+- 正常流程是否可用
+- 边界输入是否处理
+- 错误提示是否清楚
+- 改动有没有影响旧功能
+- 中文输入、中文路径、中文提示是否正常
 
-Focus:
+## Reviewer / 审查者
 
-- Correctness
-- Maintainability
-- Security and privacy risk
-- Performance risk
-- Unnecessary complexity
-- Missing tests
+Reviewer 在实现后做质量审查。
 
-Output findings first, ordered by severity.
+关注点：
+
+- 正确性
+- 可维护性
+- 安全和隐私风险
+- 性能风险
+- 是否过度复杂
+- 是否缺少测试
+- 是否破坏现有接口或使用方式
+
+输出要求：
+
+- 先列问题，再列建议。
+- 问题按严重程度排序。
+- 如果没有明显问题，也要说明剩余风险。
+
+推荐格式：
+
+```text
+发现的问题：
+1. [高/中/低] ...
+
+建议修改：
+- ...
+
+剩余风险：
+- ...
+```
+
+## 角色使用建议
+
+小任务不要使用全部角色。常见组合如下：
+
+- 需求不清楚：用户代表 + 产品经理
+- 要做页面或工具：产品经理 + 设计师 + 架构师
+- 要改代码：架构师 + 开发者 + QA
+- 要检查项目：Reviewer + 架构师 + QA
+- 要快速 vibe coding：产品经理 + 架构师 + 开发者 + Reviewer
+
+角色的价值是帮助做出更好的项目判断，而不是写长篇角色扮演。

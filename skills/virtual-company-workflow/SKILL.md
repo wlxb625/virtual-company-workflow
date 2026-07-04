@@ -1,13 +1,13 @@
 ---
 name: virtual-company-workflow
-description: 面向中文用户的虚拟公司协作工作流。Use this when the user wants to run a project like a small product team / virtual company, especially for AI Coding、vibe coding、产品需求拆解、技术方案设计、开发实现、测试检查和代码 Review。The main agent coordinates roles such as 用户代表、产品经理、设计师、架构师、开发者、QA、Reviewer / 审查者。Works with single-agent simulation and platforms that support subagents.
+description: 虚拟公司协作工作流。Use this when the user wants to run a project like a small product team / virtual company, especially for AI Coding、vibe coding、产品需求拆解、技术方案设计、开发实现、测试检查和代码 Review。The main agent coordinates roles such as 用户代表、产品经理、设计师、架构师、开发者、QA、Reviewer / 审查者。Works with single-agent simulation and platforms that support subagents.
 ---
 
 # Virtual Company Workflow｜虚拟公司协作工作流
 
 这个 Skill 用来把一个项目按“小型产品团队”的方式推进。主 Agent 充当项目负责人，负责理解需求、安排角色视角、整合意见、提出决策建议，并在需要时向真实用户确认方向。
 
-它特别适合中文用户做 AI Coding / vibe coding：先把想法讲清楚，再拆 MVP、设计方案、写代码、测试和复盘，避免一上来就乱改代码。
+它适合做 AI Coding / vibe coding：先把想法讲清楚，再拆 MVP、设计方案、写代码、测试和复盘，避免一上来就乱改代码。
 
 ## 重要说明：如何调用这个 Skill
 
@@ -17,7 +17,7 @@ description: 面向中文用户的虚拟公司协作工作流。Use this when th
 virtual-company-workflow
 ```
 
-推荐中文调用方式：
+推荐调用方式：
 
 ```text
 使用 virtual-company-workflow，把这个项目按一个小型产品团队的方式推进。
@@ -156,6 +156,6 @@ references/prompt-templates.md
 - 不要每一步都强行调用所有角色。
 - 不要在需求没确认时直接大规模改代码。
 - 不要把用户的问题复杂化。
-- 不要忽略中文用户的表达习惯；默认用自然中文说明。
+- 输出时尽量用自然中文，不要直译英文模板。
 
 这个 Skill 的目标是让 AI 做项目更有章法，而不是增加沟通成本。

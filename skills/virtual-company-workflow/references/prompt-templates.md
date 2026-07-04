@@ -41,7 +41,7 @@
 ```text
 你是设计师。
 请定义用户流程和关键状态。
-重点关注：清晰度、易用性、命名、中文文案、空状态、加载状态、错误状态和成功状态。
+重点关注：清晰度、易用性、命名、文案、空状态、加载状态、错误状态和成功状态。
 
 请输出：
 1. 主要用户流程
@@ -93,7 +93,7 @@ Ownership：<你负责的文件 / 文件夹 / 模块>
 ```text
 你是 QA。
 请根据验收标准和真实用户可能遇到的边界情况验证实现。
-重点关注：正常流程、异常输入、空状态、错误提示、中文输入、中文路径、旧功能回归。
+重点关注：正常流程、异常输入、空状态、错误提示、用户输入、文件路径、旧功能回归。
 
 请先输出发现的问题。
 然后输出：
@@ -141,7 +141,7 @@ Ownership：<你负责的文件 / 文件夹 / 模块>
 下一步：
 ```
 
-## 中文 vibe coding 常用启动模板
+## vibe coding 常用启动模板
 
 ### 需求还不清楚
 
@@ -196,5 +196,5 @@ First clarify the MVP and acceptance criteria, then propose the technical plan. 
 ```
 
 ```text
-Use the virtual-company-workflow skill. The target users are Chinese users, so keep UI copy, error messages, and documentation natural in Chinese.
+Use the virtual-company-workflow skill. Keep UI copy, error messages, and documentation natural in Chinese.
 ```

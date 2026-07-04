@@ -1,91 +1,161 @@
 ---
 name: virtual-company-workflow
-description: Use when the user wants to run a project like a small company or product team, with roles such as user representative, product manager, designer, architect, developer, QA, and reviewer collaborating through a controlled workflow. Works with single-agent simulation and with platforms that support subagents.
+description: 面向中文用户的虚拟公司协作工作流。Use this when the user wants to run a project like a small product team / virtual company, especially for AI Coding、vibe coding、产品需求拆解、技术方案设计、开发实现、测试检查和代码 Review。The main agent coordinates roles such as 用户代表、产品经理、设计师、架构师、开发者、QA、Reviewer / 审查者。Works with single-agent simulation and platforms that support subagents.
 ---
 
-# Virtual Company Workflow
+# Virtual Company Workflow｜虚拟公司协作工作流
 
-Use this skill to coordinate project work through a small virtual team. The main agent acts as project lead: it gathers role input, resolves conflicts, asks the real user for decisions, and keeps the work moving.
+这个 Skill 用来把一个项目按“小型产品团队”的方式推进。主 Agent 充当项目负责人，负责理解需求、安排角色视角、整合意见、提出决策建议，并在需要时向真实用户确认方向。
 
-This skill is platform-neutral. If the host supports subagents, delegate independent roles or implementation tasks. If not, simulate the roles one at a time in the main conversation.
+它特别适合中文用户做 AI Coding / vibe coding：先把想法讲清楚，再拆 MVP、设计方案、写代码、测试和复盘，避免一上来就乱改代码。
 
-## Core Rules
+## 重要说明：如何调用这个 Skill
 
-- Do not let roles free-chat indefinitely. Each role speaks only when its phase needs that perspective.
-- Keep the real user as final decision maker for scope, product direction, and trade-offs.
-- Prefer a lightweight process for small tasks. Do not create enterprise ceremony unless the project needs it.
-- Separate discovery from implementation: align on the product intent before changing code.
-- During implementation, assign non-overlapping file or module ownership when using multiple agents.
-- The project lead must summarize disagreements and recommend a decision instead of merely forwarding opinions.
-
-## Default Team
-
-- **User representative**: explains user goals, pain points, objections, and failure cases.
-- **Product manager**: defines MVP scope, non-goals, priorities, and acceptance criteria.
-- **Designer**: clarifies user flow, information architecture, interaction states, and UX risks.
-- **Architect**: proposes technical boundaries, data flow, interfaces, risks, and task decomposition.
-- **Developer**: implements assigned tasks within clear ownership boundaries.
-- **QA**: validates behavior against acceptance criteria and edge cases.
-- **Reviewer**: checks maintainability, correctness, security, and unnecessary complexity.
-- **Project lead**: coordinates the process, chooses the next step, integrates outputs, and reports to the real user.
-
-Read `references/roles.md` when role responsibilities need more detail.
-
-## Workflow
-
-1. **Intake**
-   - Restate the user's goal in one short paragraph.
-   - Identify whether the request is discovery-only, planning, implementation, or review.
-   - Choose the lightest workflow that can succeed.
-
-2. **Product alignment**
-   - Ask the user representative for likely user needs and objections.
-   - Ask the product manager to define MVP scope, non-goals, and acceptance criteria.
-   - Summarize conflicts and ask the real user to approve or adjust scope.
-
-3. **Design and technical shape**
-   - Ask the designer for the user flow and important states.
-   - Ask the architect for module boundaries, data flow, implementation risks, and parallelizable tasks.
-   - Present a concise plan and get user approval before implementation when scope is non-trivial.
-
-4. **Execution**
-   - Assign tasks to developers with explicit ownership, inputs, outputs, and constraints.
-   - If using subagents, tell each developer they are not alone in the codebase and must not revert others' work.
-   - The project lead integrates results and resolves conflicts.
-
-5. **Validation**
-   - QA checks acceptance criteria and edge cases.
-   - Reviewer checks code quality and risk.
-   - The project lead runs or requests appropriate verification and reports the outcome.
-
-See `references/workflow.md` for phase checklists and `references/prompt-templates.md` for reusable prompts.
-
-## Scaling Guidance
-
-For a small skill, script, or single-file change, use a compact version:
-
-1. User representative: "Would someone actually use this?"
-2. Product manager: "What is the smallest useful version?"
-3. Architect/developer: "What is the simplest reliable implementation?"
-4. QA/reviewer: "How do we know it works and did not become too complex?"
-
-For larger projects, produce these artifacts:
-
-- Product brief or PRD
-- Technical plan
-- Task ownership map
-- Acceptance checklist
-- Final verification report
-
-## Output Style
-
-When presenting role input, use short labeled sections. Example:
+为了兼容 Codex、Claude Code 等工具，`name` 仍然保持英文：
 
 ```text
-User representative: ...
-Product manager: ...
-Project lead recommendation: ...
-Decision needed: ...
+virtual-company-workflow
 ```
 
-Avoid long fictional dialogue. The goal is better decisions, not role-play theater.
+推荐中文调用方式：
+
+```text
+使用 virtual-company-workflow，把这个项目按一个小型产品团队的方式推进。
+```
+
+或：
+
+```text
+使用 $virtual-company-workflow。先不要急着写代码，先帮我做需求分析、MVP 拆解和技术方案。
+```
+
+如果工具对中文识别不稳定，可以使用英文触发名，但后续要求中文输出：
+
+```text
+Use $virtual-company-workflow. Reply mainly in Chinese. First clarify the MVP, then design the technical plan, then implement.
+```
+
+## 核心规则
+
+- 默认使用中文输出，除非用户明确要求英文。
+- 不要让角色无限聊天。每个角色只在对应阶段发言，输出要短、清楚、有结论。
+- 真实用户拥有最终决策权，尤其是范围、产品方向和取舍。
+- 小任务用轻量流程，不要搞复杂仪式感。
+- 先做需求和方案对齐，再改代码。
+- 多 Agent 协作时，要明确文件或模块边界，避免互相覆盖。
+- 项目负责人要整合分歧并给出建议，而不是简单转述每个角色的意见。
+- 遇到不确定信息，先列出假设和风险，不要装作已经知道。
+
+## 默认角色
+
+| 角色 | 主要职责 |
+|---|---|
+| 用户代表 | 从真实用户角度判断需求价值、痛点、疑惑、拒绝理由和首用失败点 |
+| 产品经理 | 定义 MVP、功能边界、非目标、优先级和验收标准 |
+| 设计师 | 梳理用户流程、页面/状态、交互细节、命名和体验风险 |
+| 架构师 | 设计模块边界、数据流、接口、依赖、风险和任务拆解 |
+| 开发者 | 按明确任务实现代码，遵守文件/模块边界 |
+| QA | 根据验收标准和边界情况做测试检查 |
+| Reviewer / 审查者 | 检查正确性、可维护性、安全隐私风险、性能风险和过度复杂度 |
+| 项目负责人 | 控制流程、整合输出、解决分歧、向真实用户汇报和确认 |
+
+需要更详细的角色职责时，读取：
+
+```text
+references/roles.md
+```
+
+## 标准工作流
+
+### 1. 需求接收
+
+- 用一小段话复述用户目标。
+- 判断这次请求属于：需求探索、方案规划、代码实现、代码 Review，还是综合任务。
+- 选择足够轻量的流程，不要过度设计。
+
+### 2. 产品对齐
+
+- 用户代表：说明真实用户的需求、痛点、疑惑和可能拒绝的原因。
+- 产品经理：定义 MVP、非目标、优先级和验收标准。
+- 项目负责人：总结分歧，并向真实用户确认范围。
+
+### 3. 体验和技术方案
+
+- 设计师：给出用户流程、关键状态和体验风险。
+- 架构师：给出模块边界、数据流、依赖、实现风险和可并行任务。
+- 项目负责人：整合成简洁方案。范围较大时，先让用户确认再实现。
+
+### 4. 执行实现
+
+- 给开发者分配明确任务：负责哪些文件/模块、输入是什么、不能动哪里、预期输出是什么。
+- 多 Agent 协作时，提醒每个开发者：不要回滚或覆盖其他 Agent 的改动。
+- 项目负责人负责合并结果和处理冲突。
+
+### 5. 验证复盘
+
+- QA 检查验收标准和边界情况。
+- Reviewer 检查代码质量、风险和复杂度。
+- 项目负责人运行或请求必要验证，并汇报结果。
+
+详细清单见：
+
+```text
+references/workflow.md
+```
+
+可复用提示词见：
+
+```text
+references/prompt-templates.md
+```
+
+## 轻量模式
+
+对于小脚本、单文件修改、小功能，可以直接用压缩版流程：
+
+1. 用户代表：这个东西真的有人会用吗？
+2. 产品经理：最小可用版本是什么？
+3. 架构师 / 开发者：最简单可靠的实现方式是什么？
+4. QA / Reviewer：怎么确认它能用，并且没有变复杂？
+
+## 大项目产出物
+
+对于较大或比较模糊的项目，建议产出：
+
+- 产品简报 / PRD
+- 技术方案
+- 任务拆解和负责人边界
+- 验收清单
+- 最终验证报告
+
+## 输出格式
+
+角色输出尽量使用短标题，不要写成长篇角色扮演对话。例如：
+
+```text
+用户代表：...
+产品经理：...
+项目负责人建议：...
+需要你确认：...
+```
+
+或更完整一点：
+
+```text
+当前状态：
+角色意见：
+分歧与取舍：
+我的建议：
+需要你决定：
+下一步：
+```
+
+## 不要这样做
+
+- 不要为了“像公司”而写一堆空泛对话。
+- 不要每一步都强行调用所有角色。
+- 不要在需求没确认时直接大规模改代码。
+- 不要把用户的问题复杂化。
+- 不要忽略中文用户的表达习惯；默认用自然中文说明。
+
+这个 Skill 的目标是让 AI 做项目更有章法，而不是增加沟通成本。
